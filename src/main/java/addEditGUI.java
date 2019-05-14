@@ -1,8 +1,9 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
-public class addEditGUI {
+public class addEditGUI extends JFrame{
     private JLabel selectedEnteredProjectName;
     private JTextField newUserName;
     private JTextField newTask;
@@ -20,11 +21,11 @@ public class addEditGUI {
     private JPanel editGUI;
 
 
-    public addEditGUI (addEdit addEditProgram){
+    addEditGUI (String pName) {
         setContentPane(editGUI);
         pack();
-        setVisible(WHENCALLED);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+        selectedEnteredProjectName.setText(pName);
 
         addEditComponents();
     }
@@ -39,10 +40,14 @@ public class addEditGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String newUser = newUserName.getText();
-                //TODO: check to see if user already exsits
-                //TODO: if user does display alert message
-                //TODO: if user does not add to user database and assign user ID number
-                //TODO: update user table in GUI
+
+                if(newUser.isEmpty()){
+                    showAlertDialog("Enter a users name.");
+                    return;
+                }
+                int userID = getUserId();//TODO: assign user ID number
+                UserDB.addUser(userID, newUser);//TODO: requery fire data table update user table in GUI
+                //TODO: update userTable
             }
         });
 
@@ -50,9 +55,11 @@ public class addEditGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String taskName = newTask.getText();
-                //TODO: get priority selection
-                //TODO: get user assigned
-                //TODO: send to task database with project listed in projec label
+                String priority = getPriority();//TODO: get priority selection
+                int uID = userDisplay.getSelectedRow();//TODO: get user id that was assigned
+                int pID = getPID(selectedEnteredProjectName.getText());//TODO: get project id
+                int taskID = getTaskID();//TODO: Get taskID
+                UserDB.addTask(taskID, taskName, priority, uID, pID);//TODO: send to task database with project listed in project label
                 //TODO: update task table
             }
         });
@@ -60,14 +67,16 @@ public class addEditGUI {
         deleteUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: delete selected user in table
+                int selectedUID = getSelectedUserID();//TODO: get selected users ID
+                UserDB.deleteSelectedUser(selectedUID);//TODO: delete selected user in table
             }
         });
 
         deleteTask.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: delete task selected in table
+                int selectedTID = getSelectedTaskID();//TODO: get taskID
+                UserDB.deleteSelectedTask(selectedTID); //TODO: delete task selected in table
             }
         });
 
@@ -77,6 +86,45 @@ public class addEditGUI {
                 //TODO: show project tasks, priorities, & assigned users in view GUI(needs to be created)
             }
         });
-        
+
+    }
+
+    private int getUserId () {
+        int Uid = 0;
+        if (Uid <= 0){
+            Uid++;
+        }
+    return  Uid;}
+
+    private int getTaskID () {
+        int Tid = 0;
+        if (Tid <= 0){
+            Tid++;
+        }
+    return  Tid;}
+
+    private String getPriority(){
+        if (priorityHigh.isSelected()) {
+            return priorityHigh.getText();
+        }else if (priorityMedium.isSelected()){
+            return priorityMedium.getText();
+        }else {
+            return priorityLow.getText();
+        }
+    }
+
+    private int getPID(String PN){
+        final String pID = "select * from projects where ? = projectName get projectID";
+
+        try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
+            PreparedStatement ps = connection.prepareStatement(pID)) {
+
+            ps.setString(1, PN);
+            ResultSet proID = ps.executeQuery();
+            int id = Integer.parseInt(proID);
+            return id;
+        }catch (SQLException e){
+            throw new RuntimeException();
+        }
     }
 }

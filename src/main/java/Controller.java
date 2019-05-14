@@ -13,13 +13,13 @@ public class Controller {
     private void startApp(){
         pdb = new ProjectsDB();
 
-        ArrayList<Projects> allData = pdb.fetchAllRecords();
+        ArrayList<Project> allData = pdb.fetchAllRecords();
 
         tGUI = new taskGUI(this);
         tGUI.setListData(allData);
     }
 
-    ArrayList<Projects> getAllData(){
+    ArrayList<Project> getAllData(){
         return pdb.fetchAllRecords();
     }
 }
