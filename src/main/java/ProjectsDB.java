@@ -16,7 +16,7 @@ public class ProjectsDB {
     private void creatTable(){
         try(Connection conn = DriverManager.getConnection(PROJECTS_DB_URL);
         Statement statement = conn.createStatement()){
-            String createTableSQLTemplate = "CREATE TABLE IF NOT Exists %s (%s TEXT PRIMARY KEY, %s TEXT)";
+            String createTableSQLTemplate = "CREATE TABLE IF NOT Exists %s (%s INTEGER PRIMARY KEY, %s TEXT)";
             String createTableSQL = String.format(createTableSQLTemplate, TABLE_NAME, PROJECT_ID_COL, PROJECT_NAME_COL);
 
             statement.executeUpdate(createTableSQL);
@@ -30,14 +30,14 @@ public class ProjectsDB {
 
         try (Connection conn = DriverManager.getConnection(PROJECTS_DB_URL);
              Statement statement = conn.createStatement()){
-            String selectAllSQL = "SELECT * FROM" + TABLE_NAME;
+            String selectAllSQL = "SELECT * FROM " + TABLE_NAME;
             ResultSet rsAll = statement.executeQuery(selectAllSQL);
 
             while (rsAll.next()){
-                String projectID = rsAll.getString(PROJECT_ID_COL);
+                int projectID = rsAll.getInt(PROJECT_ID_COL);
                 String projectName = rsAll.getString(PROJECT_NAME_COL);
-                Project placeRecord = new Project(projectID, projectName);
-                allRecords.add(placeRecord);
+                Project project = new Project(projectID, projectName);
+                allRecords.add(project);
             }
 
             rsAll.close();
@@ -48,16 +48,15 @@ public class ProjectsDB {
     }
 
     protected static void sendNewProject (int id, String n) {
-        final String newProject = "insert into projects values (?,?)";
+        final String newProject = "insert into projects (projectName) values (?)";
 
         try (Connection connection = DriverManager.getConnection(DMConfig.projects_db);
              PreparedStatement ps = connection.prepareStatement(newProject)){
-            //method called to get counter
-            ps.setInt(1, id);
-            ps.setString(2, n);
+            // SQLite will automatically generate a project ID, so you just need to set the name
+            ps.setString(1, n);
             ps.execute();
         }catch (SQLException e){
-            System.err.println("There was an error adding the project");
+            System.err.println("There was an error adding the project" + e);
         }
     }
 

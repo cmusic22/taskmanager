@@ -8,7 +8,7 @@ public class UserDB {
     protected static void addUser (int Uid, String un){
         final String user = "insert into users values (?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(DMConfig.user_db);
+        try (Connection connection = DriverManager.getConnection(DMConfig.projects_db);
              PreparedStatement ps = connection.prepareStatement(user)){
 
             ps.setInt(1, Uid);
@@ -21,7 +21,7 @@ public class UserDB {
 
     protected static void addTask (int Tid, String tn, String pri, int u, int p) {
         final String taskAddition = "insert into tasks values (?,?,?,?,?)";
-        try(Connection connection = DriverManager.getConnection(DMConfig.tasks_db);
+        try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
         PreparedStatement ps = connection.prepareStatement(taskAddition)){
 
             ps.setInt(1, Tid);
@@ -38,7 +38,7 @@ public class UserDB {
     protected static void deleteSelectedUser (int Uid){
         final String deleteUser = "delete from users where userID like ?";
 
-        try(Connection connection = DriverManager.getConnection(DMConfig.user_db);
+        try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
         PreparedStatement ps = connection.prepareStatement(deleteUser)){
 
             ps.setInt(1, Uid);
@@ -51,7 +51,7 @@ public class UserDB {
     protected static void deleteSelectedTask (int Tid){
         final String deleteTask = "delete from tasks where taskID like ?";
 
-        try(Connection connection = DriverManager.getConnection(DMConfig.tasks_db);
+        try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
         PreparedStatement ps = connection.prepareStatement(deleteTask)){
             ps.setInt(1, Tid);
             ps.execute();

@@ -51,34 +51,34 @@ public class addEditGUI extends JFrame{
             }
         });
 
-        addTask.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String taskName = newTask.getText();
-                String priority = getPriority();//TODO: get priority selection
-                int uID = userDisplay.getSelectedRow();//TODO: get user id that was assigned
-                int pID = getPID(selectedEnteredProjectName.getText());//TODO: get project id
-                int taskID = getTaskID();//TODO: Get taskID
-                UserDB.addTask(taskID, taskName, priority, uID, pID);//TODO: send to task database with project listed in project label
-                //TODO: update task table
-            }
-        });
+//        addTask.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String taskName = newTask.getText();
+//                String priority = getPriority();//TODO: get priority selection
+//                int uID = userDisplay.getSelectedRow();//TODO: get user id that was assigned
+//                int pID = getPID(selectedEnteredProjectName.getText());//TODO: get project id
+//                int taskID = getTaskID();//TODO: Get taskID
+//                UserDB.addTask(taskID, taskName, priority, uID, pID);//TODO: send to task database with project listed in project label
+//                //TODO: update task table
+//            }
+//        });
 
-        deleteUser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedUID = getSelectedUserID();//TODO: get selected users ID
-                UserDB.deleteSelectedUser(selectedUID);//TODO: delete selected user in table
-            }
-        });
-
-        deleteTask.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedTID = getSelectedTaskID();//TODO: get taskID
-                UserDB.deleteSelectedTask(selectedTID); //TODO: delete task selected in table
-            }
-        });
+//        deleteUser.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                int selectedUID = getSelectedUserID();//TODO: get selected users ID
+//                UserDB.deleteSelectedUser(selectedUID);//TODO: delete selected user in table
+//            }
+//        });
+//
+//        deleteTask.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                int selectedTID = getSelectedTaskID();//TODO: get taskID
+//                UserDB.deleteSelectedTask(selectedTID); //TODO: delete task selected in table
+//            }
+//        });
 
         viewProject.addActionListener(new ActionListener() {
             @Override
@@ -113,18 +113,18 @@ public class addEditGUI extends JFrame{
         }
     }
 
-    private int getPID(String PN){
-        final String pID = "select * from projects where ? = projectName get projectID";
-
-        try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
-            PreparedStatement ps = connection.prepareStatement(pID)) {
-
-            ps.setString(1, PN);
-            ResultSet proID = ps.executeQuery();
-            int id = Integer.parseInt(proID);
-            return id;
-        }catch (SQLException e){
-            throw new RuntimeException();
-        }
-    }
+//    private int getPID(String PN){
+//        final String pID = "select * from projects where ? = projectName get projectID";
+//
+//        try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
+//            PreparedStatement ps = connection.prepareStatement(pID)) {
+//
+//            ps.setString(1, PN);
+//            ResultSet proID = ps.executeQuery();
+//            int id = Integer.parseInt(proID);
+//            return id;
+//        }catch (SQLException e){
+//            throw new RuntimeException();
+//        }
+//   }
 }
