@@ -11,7 +11,7 @@ public class taskGUI extends JFrame {
 
     private JTextField newProjectName;
     private JButton addProject;
-    private JTable currentProjects;
+    private JList<Project> currentProjects;
     private JButton deleteProject;
     private JButton viewProject;
     private JPanel mainPanel;
@@ -23,7 +23,7 @@ public class taskGUI extends JFrame {
    taskGUI (Controller controller){
        this.controller = controller;
        allProjectsListModel = new DefaultListModel<Project>();
-       projectList.setModel(allProjectsListModel);
+       currentProjects.setModel(allProjectsListModel);
 
        setupUIComponents();
 
@@ -72,7 +72,15 @@ public class taskGUI extends JFrame {
                         }else {
                             int projectID = getProjectID();
                             ProjectsDB.sendNewProject(projectID, projectName);//add projectName to the database\
-                            new addEditGUI(projectName);//open editGUI
+                            //new addEditGUI(projectName);//open editGUI
+                            // todo fix addEdtiGUI and put this line back
+
+                            // Refresh JList
+                            ArrayList<Project> allProjects = ProjectsDB.fetchAllRecords();
+                            allProjectsListModel.clear();
+                            for (Project project: allProjects) {
+                                allProjectsListModel.addElement(project);
+                            }
 
                         }
                     }
@@ -88,8 +96,10 @@ public class taskGUI extends JFrame {
             viewProject.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    currentProjects.getSelectedRow();//TODO: pull projectID of selected project
+                    Project project = currentProjects.getSelectedValue(); //TODO: pull projectID of selected project
                     //TODO: pull tasks, priority, & users for selected project ID
+                    new viewProject(project, taskGUI.this);
+
                 }
             });
 
@@ -97,7 +107,8 @@ public class taskGUI extends JFrame {
             deleteProject.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    int projectID = currentProjects.getSelectedColumn();//TODO: Get selected projectID
+                    Project project = currentProjects.getSelectedValue();//TODO: Get selected projectID
+                    int projectID = project.getId();
                     ProjectsDB.deleteSelectedProject(projectID);
                 }
             });
