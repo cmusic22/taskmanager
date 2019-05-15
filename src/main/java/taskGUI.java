@@ -45,7 +45,12 @@ public class taskGUI extends JFrame {
            }
        }
    }
-
+    private void refreshList (){
+            ArrayList<Project> allProjects = ProjectsDB.fetchAllRecords();
+            allProjectsListModel.clear();
+                            for (Project project: allProjects) {
+        allProjectsListModel.addElement(project);}
+    }
 
     protected void showAlertDialog(String message){
         JOptionPane.showMessageDialog(this, message);
@@ -74,12 +79,7 @@ public class taskGUI extends JFrame {
                             new addEditGUI(projectName);//open editGUI
                             // todo fix addEdtiGUI and put this line back
 
-                            // Refresh JList
-                            ArrayList<Project> allProjects = ProjectsDB.fetchAllRecords();
-                            allProjectsListModel.clear();
-                            for (Project project: allProjects) {
-                                allProjectsListModel.addElement(project);
-                            }
+                            refreshList();
 
                         }
                     }
@@ -108,6 +108,8 @@ public class taskGUI extends JFrame {
                     Project project = currentProjects.getSelectedValue();//TODO: Get selected projectID
                     int projectID = project.getId();
                     ProjectsDB.deleteSelectedProject(projectID);
+
+                    refreshList();
                 }
             });
 
