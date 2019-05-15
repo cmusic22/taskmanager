@@ -10,7 +10,7 @@ public class UserDB {
     static final String OK = "OK";
 
     UserDB() {creatTable();}
-
+//this is supposed to create the table if one hasn't been created
     private void creatTable(){
         try(Connection conn = DriverManager.getConnection(PROJECTS_DB_URL);
             Statement statement = conn.createStatement()) {
@@ -22,7 +22,7 @@ public class UserDB {
             throw new RuntimeException(sqle);
         }
     }
-
+    //this is supposed to fetch all user records and put them into an ArrayList to be displayed in the JList
     public static ArrayList<User> fetchUserRecords(){
         ArrayList<User> allUsers = new ArrayList<>();
 
@@ -44,23 +44,23 @@ public class UserDB {
             throw new RuntimeException(sqle);
         }
     }
-
+    //this is supposed to add a user to the user table then fetch all users and updated the JList
     protected static void addUser (String un){
         final String user = "insert into users userName values (?)";
 
         try (Connection connection = DriverManager.getConnection(DMConfig.projects_db);
              PreparedStatement ps = connection.prepareStatement(user)){
 
-            ps.setString(2, un);
+            ps.setString(1, un);
             ps.execute();
-            fetchUserRecords();
+            fetchUserRecords(); //suposed to get users from table and put into list and refresh JTable
         }catch (SQLException e){
             System.err.println("There was an error adding the user");
         }
     }
 
 
-
+        //this is supposed to delete the selected user from the database, but don't know if it works becasue the List wont show any users
     protected static void deleteSelectedUser (int Uid){
         final String deleteUser = "delete from users where userID like ?";
 

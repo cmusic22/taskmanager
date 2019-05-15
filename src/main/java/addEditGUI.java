@@ -36,7 +36,7 @@ public class addEditGUI extends JFrame{
 
         allUserListModel = new DefaultListModel<>();
         userList.setModel(allUserListModel);
-
+        //used information on Java2s.com & docs.orocal,com
         taskTableModel = new AbstractTableModel() {
             @Override
             public int getRowCount() {
@@ -71,14 +71,14 @@ public class addEditGUI extends JFrame{
     }
 
     private void addEditComponents() {
-        // TODO: place custom component creation code here
+        // supposed to add user to JList by calling fetchUserRecords(); in the UserDB.addUser(); method
         addUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String newUser = newUserName.getText();
 
                 if(newUser.isEmpty()){
-                    showAlertDialog("Enter a users name.");
+                    showAlertDialog("Enter a users name."); //this isn't firing for some reason?
                     return;
                 }
 
@@ -86,7 +86,7 @@ public class addEditGUI extends JFrame{
 
             }
         });
-
+            //supposed to add task to the Task Database and appear in the JTable when it has been added
         addTask.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,7 +100,7 @@ public class addEditGUI extends JFrame{
                 //TODO: update task table
             }
         });
-
+            //this is to delete the selected user from the user list (Don't know if it works yet beacause the User list isn't updateing)
         deleteUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,25 +109,25 @@ public class addEditGUI extends JFrame{
                 UserDB.deleteSelectedUser(selectedUID);//TODO: delete selected user in table
             }
         });
-
+            //this is to delete the selected task in the table (don't know if it works because addTask isn't working for some reason)
         deleteTask.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int task = taskTable.getSelectedRow();
-                int selectedTID = task.getId();//TODO: get taskID
-                TaskDB.deleteSelectedTask(selectedTID); //TODO: delete task selected in table
+                TaskDB.deleteSelectedTask(task); //TODO: delete task selected in table
             }
         });
-
+            //this is to 'print' the tasks of the current project you're adding tasks to (Not Working Yet)
         viewProject.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: show project tasks, priorities, & assigned users in view GUI
+                // project = selectedEnteredProjectName.getText();
+                //new viewProject(project, addEditGUI.this)//TODO: show project tasks, priorities, & assigned users in view GUI
             }
         });
 
     }
-
+    //need to put buttons into a group (Stackoverflow)
     private String getPriority(){
         if (priorityHigh.isSelected()) {
             return priorityHigh.getText();
@@ -137,7 +137,7 @@ public class addEditGUI extends JFrame{
             return priorityLow.getText();
         }
     }
-
+        //found a similar version of this on Stackoverflow altered for my needs
     private int getProjectID (String n){
 
         try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
@@ -152,4 +152,6 @@ public class addEditGUI extends JFrame{
             throw new RuntimeException(sqle);
         }
     }
+
+
 }

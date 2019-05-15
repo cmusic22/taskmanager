@@ -5,6 +5,7 @@ public class Task {
     private String taskPRIORITY;
     private int taskUSER;
     private int taskPROJECT;
-
-    public Task ();
+        //this class Object is going to be for pulling tasks related
+        //to the project that was selected to view
+    //public Task ();
 }

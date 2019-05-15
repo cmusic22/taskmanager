@@ -12,7 +12,7 @@ public class ProjectsDB {
     static final String OK = "OK";
 
     ProjectsDB() {creatTable();}
-
+        //creates the project table if there isn't one already created
     private void creatTable(){
         try(Connection conn = DriverManager.getConnection(PROJECTS_DB_URL);
         Statement statement = conn.createStatement()){
@@ -24,7 +24,7 @@ public class ProjectsDB {
             throw new RuntimeException(sqle);
         }
     }
-
+    //this gets all projets and displays them in the project JList when the program starts
     public static ArrayList<Project> fetchAllRecords(){
         ArrayList<Project> allRecords = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class ProjectsDB {
             throw new RuntimeException(sqle);
         }
     }
-
+        //this adds a new project to the project table
     protected static void sendNewProject (String n) {
         final String newProject = "insert into projects (projectName) values (?)";
 

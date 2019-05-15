@@ -9,7 +9,7 @@ public class User {
         name = userName;
     }
 
-    public int getId {
+    public int getId (){
         return id;
     }
 
@@ -17,7 +17,7 @@ public class User {
         this.id = id;
     }
 
-    public String getName{
+    public String getName (){
         return name;
     }
 

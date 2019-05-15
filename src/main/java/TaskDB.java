@@ -12,7 +12,7 @@ public class TaskDB {
     static final String OK = "OK";
 
     TaskDB() {createTable();}
-
+//supposed to create task table if one is not created already
     private void createTable(){
         try (Connection conn = DriverManager.getConnection(PROJECTS_DB_URL);
              Statement statement = conn.createStatement()){
@@ -23,7 +23,7 @@ public class TaskDB {
             throw new RuntimeException(sqle);
         }
     }
-
+        //this is supposed to add a task to the database
     protected static void addTask (String tn, String pri, int u, int p) {
         final String taskAddition = "insert into tasks (taskNAME, taskPRIORITY, taskUSER, taskPROJECT) values (?,?,?,?,?)";
         try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
@@ -39,7 +39,7 @@ public class TaskDB {
             System.err.println("There was an error adding the task");
         }
     }
-
+        //this is to delete the task
     protected static void deleteSelectedTask (int Tid){
         final String deleteTask = "delete from tasks where taskID like ?";
 
