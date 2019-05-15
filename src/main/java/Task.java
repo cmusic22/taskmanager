@@ -1,4 +1,10 @@
 public class Task {
 
-    //for object table
+    private int taskID;
+    private String taskNAME;
+    private String taskPRIORITY;
+    private int taskUSER;
+    private int taskPROJECT;
+
+    public Task ();
 }

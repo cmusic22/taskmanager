@@ -9,7 +9,7 @@ public class User {
         name = userName;
     }
 
-    public int getId{
+    public int getId {
         return id;
     }
 
@@ -27,7 +27,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Project" +
+        return "User" +
                 "id=" + id +
                 ", name='" + name +"'";
     }

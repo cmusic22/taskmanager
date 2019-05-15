@@ -1,6 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.UUID;
+
 
 public class ProjectsDB {
     private static final String PROJECTS_DB_URL = DMConfig.projects_db;
@@ -26,7 +26,7 @@ public class ProjectsDB {
     }
 
     public static ArrayList<Project> fetchAllRecords(){
-        ArrayList<Project> allRecords = new ArrayList<Project>();
+        ArrayList<Project> allRecords = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(PROJECTS_DB_URL);
              Statement statement = conn.createStatement()){
@@ -47,7 +47,7 @@ public class ProjectsDB {
         }
     }
 
-    protected static void sendNewProject (int id, String n) {
+    protected static void sendNewProject (String n) {
         final String newProject = "insert into projects (projectName) values (?)";
 
         try (Connection connection = DriverManager.getConnection(DMConfig.projects_db);

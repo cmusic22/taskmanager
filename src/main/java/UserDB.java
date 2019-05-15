@@ -1,39 +1,65 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class UserDB {
+    private static final String PROJECTS_DB_URL = DMConfig.projects_db;
+    private static final String TABLE_NAME = "users";
+    private static final String USER_ID_COL = "userID";
+    private static final String USER_NAME_COL = "userName";
 
-    protected static void addUser (int Uid, String un){
-        final String user = "insert into users values (?, ?)";
+    static final String OK = "OK";
+
+    UserDB() {creatTable();}
+
+    private void creatTable(){
+        try(Connection conn = DriverManager.getConnection(PROJECTS_DB_URL);
+            Statement statement = conn.createStatement()) {
+            String createTableSQLTemplate = "CREATE TABLE IF NOT Exists %s (%s INTEGER PRIMARY KEY, %s TEXT)";
+            String createTableSQL = String.format(createTableSQLTemplate, TABLE_NAME, USER_ID_COL, USER_NAME_COL);
+
+            statement.executeUpdate(createTableSQL);
+        }catch (SQLException sqle){
+            throw new RuntimeException(sqle);
+        }
+    }
+
+    public static ArrayList<User> fetchUserRecords(){
+        ArrayList<User> allUsers = new ArrayList<>();
+
+        try(Connection conn = DriverManager.getConnection(PROJECTS_DB_URL);
+            Statement statement = conn.createStatement()){
+            String selectUSERSQL = "SELECT * FROM" + TABLE_NAME;
+            ResultSet sUSER = statement.executeQuery(selectUSERSQL);
+
+            while (sUSER.next()){
+                int userID = sUSER.getInt(USER_ID_COL);
+                String userName = sUSER.getString(USER_NAME_COL);
+                User user = new User(userID, userName);
+                allUsers.add(user);
+            }
+
+            sUSER.close();
+            return allUsers;
+        }catch (SQLException sqle){
+            throw new RuntimeException(sqle);
+        }
+    }
+
+    protected static void addUser (String un){
+        final String user = "insert into users userName values (?)";
 
         try (Connection connection = DriverManager.getConnection(DMConfig.projects_db);
              PreparedStatement ps = connection.prepareStatement(user)){
 
-            ps.setInt(1, Uid);
             ps.setString(2, un);
             ps.execute();
+            fetchUserRecords();
         }catch (SQLException e){
             System.err.println("There was an error adding the user");
         }
     }
 
-    protected static void addTask (int Tid, String tn, String pri, int u, int p) {
-        final String taskAddition = "insert into tasks values (?,?,?,?,?)";
-        try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
-        PreparedStatement ps = connection.prepareStatement(taskAddition)){
 
-            ps.setInt(1, Tid);
-            ps.setString(2, tn);
-            ps.setString(3, pri);
-            ps.setInt(4, u);
-            ps.setInt(5, p);
-            ps.execute();
-        }catch (SQLException e){
-            System.err.println("There was an error adding the task");
-        }
-    }
 
     protected static void deleteSelectedUser (int Uid){
         final String deleteUser = "delete from users where userID like ?";
@@ -48,15 +74,5 @@ public class UserDB {
         }
     }
 
-    protected static void deleteSelectedTask (int Tid){
-        final String deleteTask = "delete from tasks where taskID like ?";
 
-        try(Connection connection = DriverManager.getConnection(DMConfig.projects_db);
-        PreparedStatement ps = connection.prepareStatement(deleteTask)){
-            ps.setInt(1, Tid);
-            ps.execute();
-        }catch (SQLException e){
-            System.err.println("There was an error deleting the task");
-        }
-    }
 }

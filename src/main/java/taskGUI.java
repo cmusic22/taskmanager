@@ -22,17 +22,17 @@ public class taskGUI extends JFrame {
 
    taskGUI (Controller controller){
        this.controller = controller;
-       allProjectsListModel = new DefaultListModel<Project>();
+       allProjectsListModel = new DefaultListModel<>();
        currentProjects.setModel(allProjectsListModel);
 
-       setupUIComponents();
+
 
        setContentPane(mainPanel);
        pack();
        setVisible(true);
        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        //call configure and implement functionality
+       setupUIComponents();//call configure and implement functionality
 
    }
 
@@ -70,9 +70,8 @@ public class taskGUI extends JFrame {
                             String existsMessage = "That name already exists, please choose a new name";
                             showAlertDialog(existsMessage);
                         }else {
-                            int projectID = getProjectID();
-                            ProjectsDB.sendNewProject(projectID, projectName);//add projectName to the database\
-                            //new addEditGUI(projectName);//open editGUI
+                            ProjectsDB.sendNewProject(projectName);//add projectName to the database\
+                            new addEditGUI(projectName);//open editGUI
                             // todo fix addEdtiGUI and put this line back
 
                             // Refresh JList
@@ -86,7 +85,6 @@ public class taskGUI extends JFrame {
                     }
                 });
 
-            //TODO: show current projects table
 
             //claraj/Java2545 Examples
             //selectListener to get JTable info
@@ -136,13 +134,5 @@ public class taskGUI extends JFrame {
             }
 
     }
-
-    private int getProjectID () {
-       int Pid = 0;
-       if (Pid <= 0){
-           Pid++;
-       }
-    return Pid;}
-
 
 }
